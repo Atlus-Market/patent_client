@@ -42,6 +42,16 @@ class ImageDocument(Model):
         with out_file.open("wb") as f:
             writer.write(f)
 
+    def download_image(self, path="."):
+        from ..api import PublishedImagesApi
+        
+        out_file = Path(path) / f"{self.doc_number}.tif"
+        
+        image = PublishedImagesApi.get_page_image_from_link(self.link, page_number=1, image_format="tif") 
+        
+        with out_file.open("wb") as f:
+            f.write(image.read())
+
 
 @dataclass
 class Images(InpadocModel):
